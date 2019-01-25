@@ -1,7 +1,7 @@
-from game import Game, Space, SpaceWalls
+from game import Board, Space, SpaceWalls
 
 
-def generate_7_move_game():
+def generate_7_move_board():
     MAP_WIDTH = 16
     MAP_HEIGHT = 16
 
@@ -63,4 +63,4 @@ def generate_7_move_game():
         (12, 5),
         (6, 13),
     )
-    return Game(spaces, primary_piece, secondary_pieces)
+    return Board(spaces, primary_piece, secondary_pieces)

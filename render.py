@@ -7,8 +7,8 @@ WALL_COLOR = ImageColor.getrgb('white')
 WALL_WIDTH = 2
 
 
-def draw_game(game):
-    spaces = game.spaces
+def draw_board(board):
+    spaces = board.spaces
     map_width = len(spaces[0])
     map_height = len(spaces)
     map_img_dimensions = (
@@ -24,7 +24,7 @@ def draw_game(game):
         if space.is_target:
             draw.ellipse(INDICATOR_ELLIPSE, fill=ImageColor.getrgb('red'))
 
-        occupant = game.get_occupant(space)
+        occupant = board.get_occupant(space)
         if occupant:
             if occupant.is_primary:
                 draw.ellipse(INDICATOR_ELLIPSE, fill=ImageColor.getrgb('blue'))

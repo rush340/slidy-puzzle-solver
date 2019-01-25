@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 
-from maps import generate_7_move_game
+from maps import generate_7_move_board
 from solver import cached_solve
-from render import draw_game
+from render import draw_board
 
 
 def main():
-    game = generate_7_move_game()
-    draw_game(game)
-    moves, solved_game = cached_solve(game)
-    draw_game(solved_game)
+    # generate a board, display it, solve it, and display the solved board
+    board = generate_7_move_board()
+    draw_board(board)
+    moves, solved_board = cached_solve(board)
+    draw_board(solved_board)
 
 
 if __name__ == '__main__':

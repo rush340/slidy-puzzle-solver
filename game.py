@@ -45,7 +45,7 @@ class Piece:
         self.is_primary = is_primary
 
 
-class Game:
+class Board:
     def __init__(self, spaces, primary_piece, secondary_pieces=None):
         if secondary_pieces is None:
             secondary_pieces = tuple()
@@ -129,7 +129,7 @@ class Game:
             piece.space.coordinates
             for piece in self.secondary_pieces
         ]
-        return Game(
+        return Board(
             self.spaces,
             self.primary_piece.space.coordinates,
             secondary_pieces_coordinates,
