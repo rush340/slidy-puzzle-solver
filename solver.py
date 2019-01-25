@@ -1,4 +1,4 @@
-from game import MainDude, SlidyDude
+from game import DIRECTIONS, MainDude, SlidyDude
 
 
 
@@ -13,7 +13,6 @@ def cached_solve(game):
     if game.is_solved():
         return 0, game.copy()
 
-    directions = ('north', 'east', 'south', 'west')
     games = [game]
     moves = 1
     seen_states = set()
@@ -27,7 +26,7 @@ def cached_solve(game):
             game_hash = hash_game_state(current_game)
             seen_states.add(game_hash)
             for piece_index in range(len(current_game.pieces)):
-                for direction in directions:
+                for direction in DIRECTIONS:
                     checked += 1
                     modified_game = current_game.copy()
                     current_piece = modified_game.pieces[piece_index]

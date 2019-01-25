@@ -5,9 +5,27 @@ coordinates: 0, 0 is top-left
 from collections import namedtuple
 
 
+NORTH = 'north'
+EAST = 'east'
+SOUTH = 'south'
+WEST = 'west'
+
+DIRECTIONS = {NORTH, SOUTH, EAST, WEST}
+OPPOSITE_DIRECTIONS = {
+    NORTH: SOUTH,
+    SOUTH: NORTH,
+    EAST: WEST,
+    WEST: EAST,
+}
+
+
+class InvalidDirection(Exception):
+    pass
+
+
 SpaceWalls = namedtuple(
     'SpaceWalls',
-    ['north', 'east', 'south', 'west'],
+    [NORTH, EAST, SOUTH, WEST],
     defaults=[False, False, False, False],
 )
 
@@ -52,30 +70,17 @@ class Game:
         return False
 
     def move_piece(self, piece, direction):
-        def move_coordinate(coordinates, direction):
-            x, y = coordinates
-            if direction == 'north':
-                return x, y - 1
-            elif direction == 'east':
-                return x + 1, y
-            elif direction == 'south':
-                return x, y + 1
-            elif direction == 'west':
-                return x - 1, y
-            else:
-                raise Exception('invalid direction')
+        if direction not in DIRECTIONS:
+            raise InvalidDirection()
 
-        def opposite_direction(direction):
-            if direction == 'north':
-                return 'south'
-            elif direction == 'south':
-                return 'north'
-            elif direction == 'east':
-                return 'west'
-            elif direction == 'west':
-                return 'east'
-            else:
-                raise Exception('invalid direction')
+        def move_coordinate(coordinates, direction):
+            movers = {
+                NORTH: lambda x, y: (x, y - 1),
+                EAST: lambda x, y: (x + 1, y),
+                SOUTH: lambda x, y: (x, y + 1),
+                WEST: lambda x, y: (x - 1, y),
+            }
+            return movers[direction](*coordinates)
 
         def within_board_bounds(self, coordinates):
             x, y = coordinates
@@ -96,7 +101,7 @@ class Game:
             dest_space = self.board[dest_y][dest_x]
 
             # can't move if destination space has a wall keeping us out from this direction
-            if getattr(dest_space.walls, opposite_direction(direction)):
+            if getattr(dest_space.walls, OPPOSITE_DIRECTIONS[direction]):
                 return False
 
             # can't move if destination space is already occupied
