@@ -1,5 +1,3 @@
-from solver import MainDude, SlidyDude
-
 from PIL import Image, ImageColor, ImageDraw
 
 
@@ -9,9 +7,9 @@ WALL_COLOR = ImageColor.getrgb('white')
 WALL_WIDTH = 2
 
 def draw_game(game):
-    a_map = game.board
-    map_width = len(a_map[0])
-    map_height = len(a_map)
+    spaces = game.spaces
+    map_width = len(spaces[0])
+    map_height = len(spaces)
     map_img_dimensions = (
         map_width * SPACE_DIMENSIONS[0],
         map_height * SPACE_DIMENSIONS[1],
@@ -27,9 +25,9 @@ def draw_game(game):
 
         occupant = game.get_occupant(space)
         if occupant:
-            if isinstance(occupant, MainDude):
+            if occupant.is_primary:
                 draw.ellipse(INDICATOR_ELLIPSE, fill=ImageColor.getrgb('blue'))
-            elif isinstance(occupant, SlidyDude):
+            else:
                 draw.ellipse(INDICATOR_ELLIPSE, fill=ImageColor.getrgb('gray'))
 
 
@@ -66,7 +64,7 @@ def draw_game(game):
         return space_img
 
     y_offset = 0
-    for row in a_map:
+    for row in spaces:
         x_offset = 0
         for space in row:
             space_img = draw_space(space)

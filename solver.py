@@ -1,4 +1,4 @@
-from game import DIRECTIONS, MainDude, SlidyDude
+from game import DIRECTIONS
 
 
 
@@ -35,7 +35,7 @@ def cached_solve(game):
                     if hash_game_state(modified_game) in seen_states:
                         discarded += 1
                         continue
-                    if isinstance(current_piece, MainDude):
+                    if current_piece.is_primary:
                         if modified_game.is_solved():
                             print(f'solved in {moves} moves')
                             return moves, modified_game

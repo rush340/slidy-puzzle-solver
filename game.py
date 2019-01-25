@@ -30,7 +30,7 @@ SpaceWalls = namedtuple(
 )
 
 
-class GameSpace:
+class Space:
     walls = SpaceWalls()
 
     def __init__(self, x, y, is_target, walls=None):
@@ -43,19 +43,32 @@ class GameSpace:
             self.walls = walls
 
 
-class SlidyDude:
-    def __init__(self, space):
+class Piece:
+    def __init__(self, space, is_primary=False):
         self.space = space
-
-
-class MainDude(SlidyDude):
-    pass
-
+        self.is_primary = is_primary
 
 class Game:
-    def __init__(self, board, pieces):
-        self.board = board
-        self.pieces = pieces
+    def __init__(self, spaces, primary_piece, secondary_pieces=None):
+        if secondary_pieces is None:
+            secondary_pieces = tuple()
+
+        self.spaces = spaces
+        self.primary_piece = Piece(
+            self.get_space(*primary_piece),
+            is_primary=True,
+        )
+        self.secondary_pieces = tuple(
+            Piece(self.get_space(*piece))
+            for piece in secondary_pieces
+        )
+
+    @property
+    def pieces(self):
+        return (self.primary_piece,) + self.secondary_pieces
+
+    def get_space(self, x, y):
+        return self.spaces[y][x]
 
     def get_occupant(self, space):
         for piece in self.pieces:
@@ -64,10 +77,7 @@ class Game:
         return False
 
     def is_solved(self):
-        for piece in self.pieces:
-            if isinstance(piece, MainDude) and piece.space.is_target:
-                return True
-        return False
+        return self.primary_piece.space.is_target
 
     def move_piece(self, piece, direction):
         if direction not in DIRECTIONS:
@@ -82,9 +92,9 @@ class Game:
             }
             return movers[direction](*coordinates)
 
-        def within_board_bounds(self, coordinates):
+        def within_spaces_bounds(self, coordinates):
             x, y = coordinates
-            return y >= 0 and y < len(self.board) and x >=0 and x < len(self.board[0])
+            return y >= 0 and y < len(self.spaces) and x >=0 and x < len(self.spaces[0])
 
         def move_single_space(piece, direction):
             # can't move if there is a wall in that direction on the current space
@@ -94,11 +104,11 @@ class Game:
             dest_coords = move_coordinate(piece.space.coordinates, direction)
             dest_x, dest_y = dest_coords
 
-            # can't move off of board
-            if not within_board_bounds(self, dest_coords):
+            # can't move off of spaces
+            if not within_spaces_bounds(self, dest_coords):
                 return False
 
-            dest_space = self.board[dest_y][dest_x]
+            dest_space = self.spaces[dest_y][dest_x]
 
             # can't move if destination space has a wall keeping us out from this direction
             if getattr(dest_space.walls, OPPOSITE_DIRECTIONS[direction]):
@@ -115,8 +125,8 @@ class Game:
             pass
 
     def copy(self):
-        copied_pieces = [
-            type(piece)(piece.space)
-            for piece in self.pieces
+        secondary_pieces_coordinates = [
+            piece.space.coordinates
+            for piece in self.secondary_pieces
         ]
-        return Game(self.board, copied_pieces)
+        return Game(self.spaces, self.primary_piece.space.coordinates, secondary_pieces_coordinates)
