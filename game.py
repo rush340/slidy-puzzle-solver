@@ -29,7 +29,7 @@ SpaceWalls = namedtuple(
 class Space:
     walls = SpaceWalls()
 
-    def __init__(self, x, y, is_target, walls=None):
+    def __init__(self, x, y, is_target=False, walls=None):
         self.coordinates = (x, y)
         self.is_target = is_target
 
@@ -89,7 +89,7 @@ class Board:
             }
             return movers[direction](*coordinates)
 
-        def within_spaces_bounds(self, coordinates):
+        def within_board_bounds(self, coordinates):
             x, y = coordinates
             return (
                 y >= 0 and y < len(self.spaces) and
@@ -105,7 +105,7 @@ class Board:
             dest_x, dest_y = dest_coords
 
             # can't move off of spaces
-            if not within_spaces_bounds(self, dest_coords):
+            if not within_board_bounds(self, dest_coords):
                 return False
 
             dest_space = self.spaces[dest_y][dest_x]
@@ -125,6 +125,8 @@ class Board:
             pass
 
     def copy(self):
+        # NOTE: this is assuming spaces will never change
+        # (might want to use pyrsistent at some point)
         secondary_pieces_coordinates = [
             piece.space.coordinates
             for piece in self.secondary_pieces
