@@ -44,6 +44,7 @@ class Piece:
         self.space = space
         self.is_primary = is_primary
 
+
 class Game:
     def __init__(self, spaces, primary_piece, secondary_pieces=None):
         if secondary_pieces is None:
@@ -90,7 +91,10 @@ class Game:
 
         def within_spaces_bounds(self, coordinates):
             x, y = coordinates
-            return y >= 0 and y < len(self.spaces) and x >=0 and x < len(self.spaces[0])
+            return (
+                y >= 0 and y < len(self.spaces) and
+                x >= 0 and x < len(self.spaces[0])
+            )
 
         def move_single_space(piece, direction):
             # can't move if there is a wall in that direction on the current space
@@ -125,4 +129,8 @@ class Game:
             piece.space.coordinates
             for piece in self.secondary_pieces
         ]
-        return Game(self.spaces, self.primary_piece.space.coordinates, secondary_pieces_coordinates)
+        return Game(
+            self.spaces,
+            self.primary_piece.space.coordinates,
+            secondary_pieces_coordinates,
+        )

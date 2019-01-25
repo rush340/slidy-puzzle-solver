@@ -6,6 +6,7 @@ INDICATOR_ELLIPSE = ((4, 4), (SPACE_DIMENSIONS[0] - 5, SPACE_DIMENSIONS[1] - 5))
 WALL_COLOR = ImageColor.getrgb('white')
 WALL_WIDTH = 2
 
+
 def draw_game(game):
     spaces = game.spaces
     map_width = len(spaces[0])
@@ -29,7 +30,6 @@ def draw_game(game):
                 draw.ellipse(INDICATOR_ELLIPSE, fill=ImageColor.getrgb('blue'))
             else:
                 draw.ellipse(INDICATOR_ELLIPSE, fill=ImageColor.getrgb('gray'))
-
 
         def draw_wall(coords):
             return draw.line(

@@ -1,7 +1,6 @@
 from game import DIRECTIONS
 
 
-
 def hash_game_state(game):
     hash_string = ''
     for piece in game.pieces:
@@ -30,7 +29,6 @@ def cached_solve(game):
                     checked += 1
                     modified_game = current_game.copy()
                     current_piece = modified_game.pieces[piece_index]
-                    origin = current_piece.space
                     modified_game.move_piece(current_piece, direction)
                     if hash_game_state(modified_game) in seen_states:
                         discarded += 1
