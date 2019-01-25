@@ -1,7 +1,3 @@
-'''
-coordinates: 0, 0 is top-left
-'''
-
 from collections import namedtuple
 
 

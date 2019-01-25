@@ -2,7 +2,12 @@
 
 Playing with solutions to the popular board game Ricochet Robots.
 
-TODO:
+## Coordinates
+
+0, 0 is considered the top left corner of the board
+
+## TODO
+
 - Reasonably fast solution
 - Prettier board definition
 - Render grid in image
